@@ -2,13 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Pong</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pong WebView</title>
 
 <style>
-
 * {
     margin: 0;
     padding: 0;
@@ -16,118 +13,79 @@
     -webkit-tap-highlight-color: transparent;
 }
 
-html,
-body {
+html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
 body {
-    background:
-        radial-gradient(circle at center, #18212f, #06090f 75%);
-
+    background: radial-gradient(circle at center, #18212f, #06090f 75%);
     color: white;
     font-family: Arial, sans-serif;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     touch-action: none;
 }
 
 .game-container {
-    width: min(1000px, 96vw);
+    width: min(1000px, 98vw);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
-/* =========================
-   TÍTULO
-========================= */
 
 h1 {
-    margin-bottom: 10px;
-
-    font-size: clamp(28px, 5vw, 44px);
-
-    letter-spacing: 8px;
-
-    text-shadow:
-        0 0 15px rgba(255,255,255,.5);
+    margin-bottom: 5px;
+    font-size: clamp(24px, 5vw, 40px);
+    letter-spacing: 6px;
+    text-shadow: 0 0 15px rgba(255,255,255,.5);
 }
-
-/* =========================
-   INFO
-========================= */
 
 .game-info {
     display: flex;
     justify-content: space-between;
-
-    padding: 0 15px;
-    margin-bottom: 8px;
-
+    width: 100%;
+    padding: 0 10px;
+    margin-bottom: 6px;
     color: #aab4c4;
-
     font-size: 13px;
+    font-weight: bold;
 }
-
-/* =========================
-   JOGO
-========================= */
 
 .game-wrapper {
     position: relative;
-
     width: 100%;
-
     aspect-ratio: 16 / 9;
-
     background: #080c13;
-
     border: 2px solid #344052;
-
     border-radius: 12px;
-
     overflow: hidden;
-
-    box-shadow:
-        0 0 30px rgba(0,0,0,.7),
-        inset 0 0 30px rgba(255,255,255,.02);
+    box-shadow: 0 0 30px rgba(0,0,0,.7), inset 0 0 30px rgba(255,255,255,.02);
 }
 
 canvas {
     display: block;
-
     width: 100%;
     height: 100%;
-
     touch-action: none;
 }
 
 /* =========================
-   OVERLAY
+   OVERLAY & MENU
 ========================= */
-
 .overlay {
     position: absolute;
-
     inset: 0;
-
     display: flex;
-
     flex-direction: column;
-
     justify-content: center;
     align-items: center;
-
-    background: rgba(5,8,13,.75);
-
+    background: rgba(5,8,13,.85);
     backdrop-filter: blur(5px);
-
     padding: 20px;
-
     z-index: 10;
 }
 
@@ -136,36 +94,32 @@ canvas {
 }
 
 .overlay h2 {
-    font-size: clamp(25px, 7vw, 40px);
-
-    margin-bottom: 10px;
+    font-size: clamp(22px, 6vw, 36px);
+    margin-bottom: 8px;
 }
 
 .overlay p {
     color: #aab4c4;
+    margin-bottom: 16px;
+    font-size: 13px;
+}
 
-    margin-bottom: 20px;
-
-    font-size: 14px;
+.btn-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 button {
     border: none;
-
-    padding: 13px 30px;
-
+    padding: 12px 24px;
     border-radius: 8px;
-
     background: white;
-
     color: #080b12;
-
-    font-size: 15px;
-
+    font-size: 14px;
     font-weight: bold;
-
     cursor: pointer;
-
     touch-action: manipulation;
 }
 
@@ -173,1154 +127,357 @@ button:active {
     transform: scale(.95);
 }
 
-/* =========================
-   CONTROLES DESKTOP
-========================= */
-
-.controls {
-    margin-top: 12px;
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 25px;
-
-    color: #8d99aa;
-
-    font-size: 12px;
-}
-
-.key {
-    display: inline-block;
-
-    padding: 3px 7px;
-
-    border: 1px solid #414b5c;
-
-    border-radius: 4px;
-
-    background: #151b25;
-
+button.secondary {
+    background: #253346;
     color: white;
-
-    margin: 0 2px;
-}
-
-/* =========================
-   CONTROLES MOBILE
-========================= */
-
-.mobile-controls {
-    display: none;
-
-    justify-content: space-between;
-
-    width: 100%;
-
-    margin-top: 12px;
-
-    gap: 15px;
-}
-
-.control-group {
-    display: flex;
-
-    gap: 8px;
-
-    flex: 1;
-}
-
-.mobile-btn {
-    flex: 1;
-
-    height: 55px;
-
-    border-radius: 10px;
-
-    background: #151b25;
-
     border: 1px solid #3a4657;
+}
 
+/* =========================
+   PAINEL DE AÇÃO MOBILE
+========================= */
+.action-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 8px;
+    gap: 10px;
+}
+
+.action-btn {
+    flex: 1;
+    height: 42px;
+    border-radius: 8px;
+    background: #151b25;
+    border: 1px solid #3a4657;
     color: white;
-
-    font-size: 22px;
-
-    padding: 0;
-
-    user-select: none;
-
-    touch-action: none;
+    font-size: 13px;
+    font-weight: bold;
 }
 
-.mobile-btn:active {
-    background: #293547;
-
-    transform: scale(.96);
-}
-
-/* =========================
-   CELULAR
-========================= */
-
-@media (max-width: 700px) {
-
-    .game-container {
-        width: 94vw;
-    }
-
-    h1 {
-        margin-bottom: 5px;
-    }
-
-    .game-info {
-        font-size: 11px;
-
-        margin-bottom: 5px;
-    }
-
-    .game-wrapper {
-        border-radius: 8px;
-    }
-
-    .controls {
-        display: none;
-    }
-
-    .mobile-controls {
-        display: flex;
-    }
-
-}
-
-/* =========================
-   CELULAR DEITADO
-========================= */
-
+/* CELULAR DEITADO */
 @media (max-height: 500px) and (orientation: landscape) {
-
-    .game-container {
-        width: 82vw;
-    }
-
-    h1 {
-        display: none;
-    }
-
-    .game-info {
-        display: none;
-    }
-
-    .mobile-controls {
-        margin-top: 5px;
-    }
-
-    .mobile-btn {
-        height: 40px;
-    }
-
+    .game-container { width: 92vw; }
+    h1 { display: none; }
+    .game-info { font-size: 11px; margin-bottom: 2px; }
+    .action-bar { margin-top: 4px; }
+    .action-btn { height: 36px; font-size: 11px; }
 }
-
 </style>
 </head>
 
 <body>
 
 <div class="game-container">
-
     <h1>PONG</h1>
 
     <div class="game-info">
-        <span>PLAYER 1</span>
-        <span>PLAYER 2</span>
+        <span id="p1Label">JOGADOR 1</span>
+        <span id="p2Label">CPU</span>
     </div>
 
-    <div class="game-wrapper">
-
+    <div class="game-wrapper" id="gameWrapper">
         <canvas id="gameCanvas"></canvas>
 
         <div class="overlay" id="overlay">
-
-            <h2 id="overlayTitle">
-                PONG
-            </h2>
-
-            <p id="overlayText">
-                Primeiro jogador a chegar a 7 pontos vence.
-            </p>
-
-            <button id="startButton">
-                COMEÇAR
-            </button>
-
+            <h2 id="overlayTitle">PONG</h2>
+            <p id="overlayText">Selecione o modo de jogo para começar (7 pontos vence):</p>
+            <div class="btn-group">
+                <button id="btn1P">1 JOGADOR (VS IA)</button>
+                <button id="btn2P" class="secondary">2 JOGADORES</button>
+            </div>
         </div>
-
     </div>
 
-    <!-- CONTROLES MOBILE -->
-
-    <div class="mobile-controls">
-
-        <div class="control-group">
-
-            <button
-                class="mobile-btn"
-                id="p1Up">
-                ▲
-            </button>
-
-            <button
-                class="mobile-btn"
-                id="p1Down">
-                ▼
-            </button>
-
-        </div>
-
-        <div class="control-group">
-
-            <button
-                class="mobile-btn"
-                id="p2Up">
-                ▲
-            </button>
-
-            <button
-                class="mobile-btn"
-                id="p2Down">
-                ▼
-            </button>
-
-        </div>
-
+    <!-- PAINEL DE CONTROLE MOBILE -->
+    <div class="action-bar">
+        <button class="action-btn" id="btnPause">PAUSAR</button>
+        <button class="action-btn" id="btnReset">REINICIAR</button>
     </div>
-
-    <div class="controls">
-
-        <span>
-            P1:
-            <span class="key">W</span>
-            <span class="key">S</span>
-        </span>
-
-        <span>
-            P2:
-            <span class="key">↑</span>
-            <span class="key">↓</span>
-        </span>
-
-        <span>
-            <span class="key">ESPAÇO</span>
-            Pausar
-        </span>
-
-        <span>
-            <span class="key">R</span>
-            Reiniciar
-        </span>
-
-    </div>
-
 </div>
 
-
 <script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const gameWrapper = document.getElementById("gameWrapper");
+const overlay = document.getElementById("overlay");
+const overlayTitle = document.getElementById("overlayTitle");
+const overlayText = document.getElementById("overlayText");
 
-const canvas =
-    document.getElementById("gameCanvas");
+const btn1P = document.getElementById("btn1P");
+const btn2P = document.getElementById("btn2P");
+const btnPause = document.getElementById("btnPause");
+const btnReset = document.getElementById("btnReset");
 
-const ctx =
-    canvas.getContext("2d");
+const p1Label = document.getElementById("p1Label");
+const p2Label = document.getElementById("p2Label");
 
-const overlay =
-    document.getElementById("overlay");
-
-const overlayTitle =
-    document.getElementById("overlayTitle");
-
-const overlayText =
-    document.getElementById("overlayText");
-
-const startButton =
-    document.getElementById("startButton");
-
-
-let width;
-let height;
-
+let width = 0;
+let height = 0;
 let keys = {};
 
 let gameRunning = false;
 let gamePaused = false;
+let isSinglePlayer = true;
 
 const WIN_SCORE = 7;
-
 
 /* =========================
    CANVAS RESPONSIVO
 ========================= */
-
 function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    const rect =
-        canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
 
-    const dpr =
-        Math.min(window.devicePixelRatio || 1, 2);
-
-    canvas.width =
-        rect.width * dpr;
-
-    canvas.height =
-        rect.height * dpr;
-
-    ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     width = rect.width;
     height = rect.height;
 
-    paddle.height =
-        Math.max(55, height * 0.22);
+    paddle.height = Math.max(50, height * 0.22);
+    paddle.width = Math.max(8, width * 0.014);
 
-    paddle.width =
-        Math.max(9, width * 0.014);
-
-    player1.x =
-        width * 0.035;
-
-    player2.x =
-        width -
-        width * 0.035 -
-        paddle.width;
-
+    player1.x = width * 0.035;
+    player2.x = width - width * 0.035 - paddle.width;
 }
 
-window.addEventListener(
-    "resize",
-    resizeCanvas
-);
-
+window.addEventListener("resize", resizeCanvas);
 
 /* =========================
-   OBJETOS
+   OBJETOS DO JOGO
 ========================= */
-
-const paddle = {
-
-    width: 12,
-
-    height: 90,
-
-    speed: 7
-
-};
-
-
-const ball = {
-
-    size: 14,
-
-    speed: 6,
-
-    x: 0,
-
-    y: 0,
-
-    vx: 0,
-
-    vy: 0
-
-};
-
-
-const player1 = {
-
-    x: 30,
-
-    y: 0,
-
-    score: 0
-
-};
-
-
-const player2 = {
-
-    x: 0,
-
-    y: 0,
-
-    score: 0
-
-};
-
-
-/* =========================
-   RESET POSIÇÕES
-========================= */
+const paddle = { width: 12, height: 90, speed: 7 };
+const ball = { size: 14, speed: 6, x: 0, y: 0, vx: 0, vy: 0 };
+const player1 = { x: 30, y: 0, score: 0 };
+const player2 = { x: 0, y: 0, score: 0 };
 
 function resetPositions() {
-
-    player1.x =
-        width * 0.035;
-
-    player2.x =
-        width -
-        width * 0.035 -
-        paddle.width;
-
-    player1.y =
-        height / 2 -
-        paddle.height / 2;
-
-    player2.y =
-        height / 2 -
-        paddle.height / 2;
-
+    player1.x = width * 0.035;
+    player2.x = width - width * 0.035 - paddle.width;
+    player1.y = height / 2 - paddle.height / 2;
+    player2.y = height / 2 - paddle.height / 2;
     resetBall();
-
 }
-
-
-/* =========================
-   BOLA
-========================= */
 
 function resetBall(direction) {
+    if (!direction) direction = Math.random() > 0.5 ? 1 : -1;
 
-    if (!direction) {
+    ball.x = width / 2 - ball.size / 2;
+    ball.y = height / 2 - ball.size / 2;
+    ball.speed = Math.max(4.5, Math.min(width * 0.012, 8));
 
-        direction =
-            Math.random() > .5
-            ? 1
-            : -1;
-
-    }
-
-    ball.x =
-        width / 2 -
-        ball.size / 2;
-
-    ball.y =
-        height / 2 -
-        ball.size / 2;
-
-    ball.speed =
-        Math.max(
-            4.5,
-            Math.min(width * .012, 8)
-        );
-
-    const angle =
-        Math.random() * .8 - .4;
-
-    ball.vx =
-        direction *
-        ball.speed;
-
-    ball.vy =
-        angle *
-        ball.speed;
-
+    const angle = Math.random() * 0.8 - 0.4;
+    ball.vx = direction * ball.speed;
+    ball.vy = angle * ball.speed;
 }
 
-
 /* =========================
-   TECLADO
+   CONTROLES TOUCH (ARRASTAR NA TELA)
 ========================= */
+gameWrapper.addEventListener("touchmove", (e) => {
+    if (!gameRunning || gamePaused) return;
+    e.preventDefault();
 
-document.addEventListener(
-    "keydown",
-    event => {
+    const rect = canvas.getBoundingClientRect();
 
-        keys[event.key.toLowerCase()] =
-            true;
+    for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        const touchX = touch.clientX - rect.left;
+        const touchY = touch.clientY - rect.top;
 
-        if (event.code === "Space") {
-
-            event.preventDefault();
-
-            if (gameRunning) {
-
-                gamePaused =
-                    !gamePaused;
-
-            }
-
+        // Lado Esquerdo = Player 1
+        if (touchX < width / 2) {
+            player1.y = touchY - paddle.height / 2;
+        } 
+        // Lado Direito = Player 2 (se não for IA)
+        else if (!isSinglePlayer) {
+            player2.y = touchY - paddle.height / 2;
         }
-
-        if (
-            event.key.toLowerCase()
-            === "r"
-        ) {
-
-            restartGame();
-
-        }
-
     }
-);
-
-
-document.addEventListener(
-    "keyup",
-    event => {
-
-        keys[event.key.toLowerCase()] =
-            false;
-
-    }
-);
-
+}, { passive: false });
 
 /* =========================
-   CONTROLES TOUCH
+   TECLADO (SUPORTE DESKTOP)
 ========================= */
+document.addEventListener("keydown", e => {
+    keys[e.key.toLowerCase()] = true;
+    if (e.code === "Space" && gameRunning) togglePause();
+    if (e.key.toLowerCase() === "r") restartGame();
+});
 
-function setupTouchButton(
-    id,
-    key
-) {
-
-    const button =
-        document.getElementById(id);
-
-    button.addEventListener(
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-
-            keys[key] = true;
-
-        }
-    );
-
-    button.addEventListener(
-        "pointerup",
-        event => {
-
-            event.preventDefault();
-
-            keys[key] = false;
-
-        }
-    );
-
-    button.addEventListener(
-        "pointerleave",
-        () => {
-
-            keys[key] = false;
-
-        }
-    );
-
-    button.addEventListener(
-        "pointercancel",
-        () => {
-
-            keys[key] = false;
-
-        }
-    );
-
-}
-
-
-setupTouchButton(
-    "p1Up",
-    "w"
-);
-
-setupTouchButton(
-    "p1Down",
-    "s"
-);
-
-setupTouchButton(
-    "p2Up",
-    "arrowup"
-);
-
-setupTouchButton(
-    "p2Down",
-    "arrowdown"
-);
-
+document.addEventListener("keyup", e => {
+    keys[e.key.toLowerCase()] = false;
+});
 
 /* =========================
-   RAQUETES
+   LÓGICA E IA
 ========================= */
-
 function updatePaddles() {
+    // Teclado Player 1
+    if (keys["w"]) player1.y -= paddle.speed;
+    if (keys["s"]) player1.y += paddle.speed;
 
-    if (keys["w"]) {
-
-        player1.y -=
-            paddle.speed;
-
+    if (isSinglePlayer) {
+        // Lógica de Inteligência Artificial para o Player 2
+        const targetY = ball.y - paddle.height / 2;
+        const aiSpeed = paddle.speed * 0.72; // Ajuste de dificuldade da IA
+        if (player2.y < targetY) player2.y += aiSpeed;
+        if (player2.y > targetY) player2.y -= aiSpeed;
+    } else {
+        // Teclado Player 2
+        if (keys["arrowup"]) player2.y -= paddle.speed;
+        if (keys["arrowdown"]) player2.y += paddle.speed;
     }
 
-    if (keys["s"]) {
-
-        player1.y +=
-            paddle.speed;
-
-    }
-
-    if (keys["arrowup"]) {
-
-        player2.y -=
-            paddle.speed;
-
-    }
-
-    if (keys["arrowdown"]) {
-
-        player2.y +=
-            paddle.speed;
-
-    }
-
-    player1.y =
-        Math.max(
-            0,
-            Math.min(
-                height - paddle.height,
-                player1.y
-            )
-        );
-
-    player2.y =
-        Math.max(
-            0,
-            Math.min(
-                height - paddle.height,
-                player2.y
-            )
-        );
-
+    // Limites da tela
+    player1.y = Math.max(0, Math.min(height - paddle.height, player1.y));
+    player2.y = Math.max(0, Math.min(height - paddle.height, player2.y));
 }
 
-
-/* =========================
-   COLISÃO
-========================= */
-
-function collision(
-    ball,
-    paddle
-) {
-
-    return (
-
-        ball.x <
-        paddle.x +
-        paddle.width
-
-        &&
-
-        ball.x +
-        ball.size >
-        paddle.x
-
-        &&
-
-        ball.y <
-        paddle.y +
-        paddle.height
-
-        &&
-
-        ball.y +
-        ball.size >
-        paddle.y
-
-    );
-
+function collision(b, p) {
+    return b.x < p.x + p.width && b.x + b.size > p.x &&
+           b.y < p.y + p.height && b.y + b.size > p.y;
 }
-
-
-/* =========================
-   BOLA
-========================= */
 
 function updateBall() {
-
     ball.x += ball.vx;
-
     ball.y += ball.vy;
 
+    if (ball.y <= 0) { ball.y = 0; ball.vy *= -1; }
+    if (ball.y + ball.size >= height) { ball.y = height - ball.size; ball.vy *= -1; }
 
-    /* PAREDE SUPERIOR */
-
-    if (ball.y <= 0) {
-
-        ball.y = 0;
-
-        ball.vy *= -1;
-
+    // Colisão Player 1
+    if (collision(ball, player1) && ball.vx < 0) {
+        ball.x = player1.x + paddle.width;
+        const hit = (ball.y + ball.size / 2) - (player1.y + paddle.height / 2);
+        ball.vx = Math.abs(ball.vx) + 0.2;
+        ball.vy = (hit / (paddle.height / 2)) * 6;
     }
 
-
-    /* PAREDE INFERIOR */
-
-    if (
-        ball.y +
-        ball.size >=
-        height
-    ) {
-
-        ball.y =
-            height -
-            ball.size;
-
-        ball.vy *= -1;
-
+    // Colisão Player 2
+    if (collision(ball, player2) && ball.vx > 0) {
+        ball.x = player2.x - ball.size;
+        const hit = (ball.y + ball.size / 2) - (player2.y + paddle.height / 2);
+        ball.vx = -Math.abs(ball.vx) - 0.2;
+        ball.vy = (hit / (paddle.height / 2)) * 6;
     }
 
-
-    /* PLAYER 1 */
-
-    if (
-        collision(ball, player1)
-        &&
-        ball.vx < 0
-    ) {
-
-        ball.x =
-            player1.x +
-            paddle.width;
-
-        const hit =
-            (
-                ball.y +
-                ball.size / 2
-            )
-            -
-            (
-                player1.y +
-                paddle.height / 2
-            );
-
-        const normalized =
-            hit /
-            (paddle.height / 2);
-
-        ball.vx =
-            Math.abs(ball.vx) +
-            .2;
-
-        ball.vy =
-            normalized * 6;
-
-    }
-
-
-    /* PLAYER 2 */
-
-    if (
-        collision(ball, player2)
-        &&
-        ball.vx > 0
-    ) {
-
-        ball.x =
-            player2.x -
-            ball.size;
-
-        const hit =
-            (
-                ball.y +
-                ball.size / 2
-            )
-            -
-            (
-                player2.y +
-                paddle.height / 2
-            );
-
-        const normalized =
-            hit /
-            (paddle.height / 2);
-
-        ball.vx =
-            -Math.abs(ball.vx) -
-            .2;
-
-        ball.vy =
-            normalized * 6;
-
-    }
-
-
-    /* PONTO PLAYER 2 */
-
-    if (
-        ball.x <
-        -ball.size
-    ) {
-
+    // Pontuação
+    if (ball.x < -ball.size) {
         player2.score++;
-
         checkWinner();
-
-        if (gameRunning) {
-
-            resetBall(-1);
-
-        }
-
+        if (gameRunning) resetBall(-1);
     }
 
-
-    /* PONTO PLAYER 1 */
-
-    if (
-        ball.x >
-        width
-    ) {
-
+    if (ball.x > width) {
         player1.score++;
-
         checkWinner();
-
-        if (gameRunning) {
-
-            resetBall(1);
-
-        }
-
+        if (gameRunning) resetBall(1);
     }
-
 }
-
-
-/* =========================
-   VENCEDOR
-========================= */
 
 function checkWinner() {
-
-    if (
-        player1.score >=
-        WIN_SCORE
-    ) {
-
-        endGame(
-            "PLAYER 1 VENCEU!"
-        );
-
-    }
-
-    if (
-        player2.score >=
-        WIN_SCORE
-    ) {
-
-        endGame(
-            "PLAYER 2 VENCEU!"
-        );
-
-    }
-
+    if (player1.score >= WIN_SCORE) endGame("JOGADOR 1 VENCEU!");
+    if (player2.score >= WIN_SCORE) endGame(isSinglePlayer ? "CPU VENCEU!" : "JOGADOR 2 VENCEU!");
 }
-
 
 function endGame(message) {
-
     gameRunning = false;
-
-    overlayTitle.textContent =
-        message;
-
-    overlayText.textContent =
-        `Placar final: ${player1.score} × ${player2.score}`;
-
-    startButton.textContent =
-        "JOGAR NOVAMENTE";
-
-    overlay.classList.remove(
-        "hidden"
-    );
-
+    overlayTitle.textContent = message;
+    overlayText.textContent = `Placar final: ${player1.score} × ${player2.score}`;
+    overlay.classList.remove("hidden");
 }
 
-
 /* =========================
-   DESENHO
+   RENDERIZAÇÃO
 ========================= */
+function draw() {
+    ctx.fillStyle = "#080c13";
+    ctx.fillRect(0, 0, width, height);
 
-function drawBackground() {
-
-    ctx.fillStyle =
-        "#080c13";
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    /* LINHA CENTRAL */
-
-    ctx.setLineDash([
-        8,
-        12
-    ]);
-
-    ctx.strokeStyle =
-        "#283241";
-
+    // Linha Central
+    ctx.setLineDash([8, 12]);
+    ctx.strokeStyle = "#283241";
     ctx.lineWidth = 2;
-
     ctx.beginPath();
-
-    ctx.moveTo(
-        width / 2,
-        0
-    );
-
-    ctx.lineTo(
-        width / 2,
-        height
-    );
-
+    ctx.moveTo(width / 2, 0);
+    ctx.lineTo(width / 2, height);
     ctx.stroke();
-
     ctx.setLineDash([]);
 
+    // Placar
+    const scoreSize = Math.max(36, width * 0.07);
+    ctx.font = `bold ${scoreSize}px Arial`;
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#202938";
+    ctx.fillText(player1.score, width / 2 - 60, scoreSize + 10);
+    ctx.fillText(player2.score, width / 2 + 60, scoreSize + 10);
 
-    /* PLACAR */
-
-    const scoreSize =
-        Math.max(
-            40,
-            width * .07
-        );
-
-    ctx.font =
-        `bold ${scoreSize}px Arial`;
-
-    ctx.textAlign =
-        "center";
-
-    ctx.fillStyle =
-        "#202938";
-
-    ctx.fillText(
-        player1.score,
-        width / 2 - 60,
-        scoreSize + 10
-    );
-
-    ctx.fillText(
-        player2.score,
-        width / 2 + 60,
-        scoreSize + 10
-    );
-
-}
-
-
-/* =========================
-   RAQUETE
-========================= */
-
-function drawPaddle(
-    x,
-    y
-) {
-
-    ctx.fillStyle =
-        "#ffffff";
-
+    // Raquetes
+    ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-
-    ctx.roundRect(
-        x,
-        y,
-        paddle.width,
-        paddle.height,
-        6
-    );
-
+    ctx.roundRect(player1.x, player1.y, paddle.width, paddle.height, 6);
+    ctx.roundRect(player2.x, player2.y, paddle.width, paddle.height, 6);
     ctx.fill();
 
-}
-
-
-/* =========================
-   BOLA
-========================= */
-
-function drawBall() {
-
-    ctx.fillStyle =
-        "#ffffff";
-
+    // Bola
     ctx.beginPath();
-
-    ctx.arc(
-        ball.x +
-        ball.size / 2,
-
-        ball.y +
-        ball.size / 2,
-
-        ball.size / 2,
-
-        0,
-        Math.PI * 2
-    );
-
+    ctx.arc(ball.x + ball.size / 2, ball.y + ball.size / 2, ball.size / 2, 0, Math.PI * 2);
     ctx.fill();
-
 }
-
-
-/* =========================
-   DRAW
-========================= */
-
-function draw() {
-
-    drawBackground();
-
-    drawPaddle(
-        player1.x,
-        player1.y
-    );
-
-    drawPaddle(
-        player2.x,
-        player2.y
-    );
-
-    drawBall();
-
-}
-
-
-/* =========================
-   GAME LOOP
-========================= */
 
 function update() {
-
-    if (
-        gameRunning &&
-        !gamePaused
-    ) {
-
+    if (gameRunning && !gamePaused) {
         updatePaddles();
-
         updateBall();
-
     }
-
     draw();
-
-    requestAnimationFrame(
-        update
-    );
-
+    requestAnimationFrame(update);
 }
 
-
 /* =========================
-   START
+   CONTROLES DA INTERFACE
 ========================= */
-
-function startGame() {
-
-    if (
-        player1.score >= WIN_SCORE
-        ||
-        player2.score >= WIN_SCORE
-    ) {
-
-        player1.score = 0;
-
-        player2.score = 0;
-
-    }
-
+function startGame(singlePlayerMode) {
+    isSinglePlayer = singlePlayerMode;
+    p2Label.textContent = isSinglePlayer ? "CPU" : "JOGADOR 2";
+    
+    player1.score = 0;
+    player2.score = 0;
     resetPositions();
 
     gameRunning = true;
-
     gamePaused = false;
-
-    overlay.classList.add(
-        "hidden"
-    );
-
+    btnPause.textContent = "PAUSAR";
+    overlay.classList.add("hidden");
 }
 
-
-/* =========================
-   RESTART
-========================= */
+function togglePause() {
+    if (!gameRunning) return;
+    gamePaused = !gamePaused;
+    btnPause.textContent = gamePaused ? "CONTINUAR" : "PAUSAR";
+}
 
 function restartGame() {
-
-    player1.score = 0;
-
-    player2.score = 0;
-
-    resetPositions();
-
     gameRunning = false;
-
     gamePaused = false;
-
-    overlayTitle.textContent =
-        "PONG";
-
-    overlayText.textContent =
-        "Primeiro jogador a chegar a 7 pontos vence.";
-
-    startButton.textContent =
-        "COMEÇAR";
-
-    overlay.classList.remove(
-        "hidden"
-    );
-
+    overlayTitle.textContent = "PONG";
+    overlayText.textContent = "Selecione o modo de jogo para começar (7 pontos vence):";
+    overlay.classList.remove("hidden");
 }
 
+btn1P.addEventListener("click", () => startGame(true));
+btn2P.addEventListener("click", () => startGame(false));
+btnPause.addEventListener("click", togglePause);
+btnReset.addEventListener("click", restartGame);
 
-/* =========================
-   BOTÃO START
-========================= */
-
-startButton.addEventListener(
-    "click",
-    startGame
-);
-
-
-/* =========================
-   INICIAR
-========================= */
-
+// Inicialização
 resizeCanvas();
-
 resetPositions();
-
 update();
-
 </script>
 
 </body>
