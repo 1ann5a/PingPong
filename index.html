@@ -1,143 +1,327 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>Pong - HTML Game</title>
+<title>Pong</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background:
-                radial-gradient(circle at center, #18212f 0%, #080b12 70%);
-            font-family: Arial, sans-serif;
-            color: white;
-            overflow: hidden;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-        .game-container {
-            width: min(1000px, 95vw);
-            text-align: center;
-        }
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
 
-        h1 {
-            margin-bottom: 12px;
-            font-size: 42px;
-            letter-spacing: 8px;
-            text-shadow: 0 0 15px rgba(255,255,255,.5);
-        }
+body {
+    background:
+        radial-gradient(circle at center, #18212f, #06090f 75%);
 
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding: 0 15px;
-            color: #aab4c4;
-            font-size: 14px;
-        }
+    color: white;
+    font-family: Arial, sans-serif;
 
-        .game-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #080c13;
-            border: 2px solid #344052;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow:
-                0 0 30px rgba(0, 0, 0, .7),
-                inset 0 0 30px rgba(255,255,255,.02);
-        }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+    touch-action: none;
+}
 
-        .overlay {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(5, 8, 13, .72);
-            backdrop-filter: blur(4px);
-        }
+.game-container {
+    width: min(1000px, 96vw);
+    text-align: center;
+}
 
-        .overlay.hidden {
-            display: none;
-        }
+/* =========================
+   TÍTULO
+========================= */
 
-        .overlay h2 {
-            font-size: 36px;
-            margin-bottom: 10px;
-        }
+h1 {
+    margin-bottom: 10px;
 
-        .overlay p {
-            color: #aab4c4;
-            margin-bottom: 22px;
-        }
+    font-size: clamp(28px, 5vw, 44px);
 
-        button {
-            border: none;
-            padding: 13px 30px;
-            border-radius: 8px;
-            background: white;
-            color: #080b12;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: .2s;
-        }
+    letter-spacing: 8px;
 
-        button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255,255,255,.3);
-        }
+    text-shadow:
+        0 0 15px rgba(255,255,255,.5);
+}
 
-        .controls {
-            margin-top: 14px;
-            display: flex;
-            justify-content: center;
-            gap: 35px;
-            color: #8d99aa;
-            font-size: 13px;
-        }
+/* =========================
+   INFO
+========================= */
 
-        .key {
-            display: inline-block;
-            padding: 3px 7px;
-            border: 1px solid #414b5c;
-            border-radius: 4px;
-            background: #151b25;
-            color: white;
-            margin: 0 2px;
-        }
+.game-info {
+    display: flex;
+    justify-content: space-between;
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 28px;
-            }
+    padding: 0 15px;
+    margin-bottom: 8px;
 
-            .controls {
-                flex-direction: column;
-                gap: 5px;
-            }
-        }
-    </style>
+    color: #aab4c4;
+
+    font-size: 13px;
+}
+
+/* =========================
+   JOGO
+========================= */
+
+.game-wrapper {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 9;
+
+    background: #080c13;
+
+    border: 2px solid #344052;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 0 30px rgba(0,0,0,.7),
+        inset 0 0 30px rgba(255,255,255,.02);
+}
+
+canvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    touch-action: none;
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+.overlay {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(5,8,13,.75);
+
+    backdrop-filter: blur(5px);
+
+    padding: 20px;
+
+    z-index: 10;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.overlay h2 {
+    font-size: clamp(25px, 7vw, 40px);
+
+    margin-bottom: 10px;
+}
+
+.overlay p {
+    color: #aab4c4;
+
+    margin-bottom: 20px;
+
+    font-size: 14px;
+}
+
+button {
+    border: none;
+
+    padding: 13px 30px;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #080b12;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+button:active {
+    transform: scale(.95);
+}
+
+/* =========================
+   CONTROLES DESKTOP
+========================= */
+
+.controls {
+    margin-top: 12px;
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 25px;
+
+    color: #8d99aa;
+
+    font-size: 12px;
+}
+
+.key {
+    display: inline-block;
+
+    padding: 3px 7px;
+
+    border: 1px solid #414b5c;
+
+    border-radius: 4px;
+
+    background: #151b25;
+
+    color: white;
+
+    margin: 0 2px;
+}
+
+/* =========================
+   CONTROLES MOBILE
+========================= */
+
+.mobile-controls {
+    display: none;
+
+    justify-content: space-between;
+
+    width: 100%;
+
+    margin-top: 12px;
+
+    gap: 15px;
+}
+
+.control-group {
+    display: flex;
+
+    gap: 8px;
+
+    flex: 1;
+}
+
+.mobile-btn {
+    flex: 1;
+
+    height: 55px;
+
+    border-radius: 10px;
+
+    background: #151b25;
+
+    border: 1px solid #3a4657;
+
+    color: white;
+
+    font-size: 22px;
+
+    padding: 0;
+
+    user-select: none;
+
+    touch-action: none;
+}
+
+.mobile-btn:active {
+    background: #293547;
+
+    transform: scale(.96);
+}
+
+/* =========================
+   CELULAR
+========================= */
+
+@media (max-width: 700px) {
+
+    .game-container {
+        width: 94vw;
+    }
+
+    h1 {
+        margin-bottom: 5px;
+    }
+
+    .game-info {
+        font-size: 11px;
+
+        margin-bottom: 5px;
+    }
+
+    .game-wrapper {
+        border-radius: 8px;
+    }
+
+    .controls {
+        display: none;
+    }
+
+    .mobile-controls {
+        display: flex;
+    }
+
+}
+
+/* =========================
+   CELULAR DEITADO
+========================= */
+
+@media (max-height: 500px) and (orientation: landscape) {
+
+    .game-container {
+        width: 82vw;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    .game-info {
+        display: none;
+    }
+
+    .mobile-controls {
+        margin-top: 5px;
+    }
+
+    .mobile-btn {
+        height: 40px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
@@ -156,371 +340,698 @@
         <canvas id="gameCanvas"></canvas>
 
         <div class="overlay" id="overlay">
-            <h2 id="overlayTitle">PONG</h2>
-            <p id="overlayText">Primeiro jogador a chegar a 7 pontos vence.</p>
-            <button id="startButton">COMEÇAR</button>
+
+            <h2 id="overlayTitle">
+                PONG
+            </h2>
+
+            <p id="overlayText">
+                Primeiro jogador a chegar a 7 pontos vence.
+            </p>
+
+            <button id="startButton">
+                COMEÇAR
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- CONTROLES MOBILE -->
+
+    <div class="mobile-controls">
+
+        <div class="control-group">
+
+            <button
+                class="mobile-btn"
+                id="p1Up">
+                ▲
+            </button>
+
+            <button
+                class="mobile-btn"
+                id="p1Down">
+                ▼
+            </button>
+
+        </div>
+
+        <div class="control-group">
+
+            <button
+                class="mobile-btn"
+                id="p2Up">
+                ▲
+            </button>
+
+            <button
+                class="mobile-btn"
+                id="p2Down">
+                ▼
+            </button>
+
         </div>
 
     </div>
 
     <div class="controls">
+
         <span>
-            Jogador 1:
+            P1:
             <span class="key">W</span>
             <span class="key">S</span>
         </span>
 
         <span>
-            Jogador 2:
+            P2:
             <span class="key">↑</span>
             <span class="key">↓</span>
         </span>
 
         <span>
-            <span class="key">ESPAÇO</span> Pausar
+            <span class="key">ESPAÇO</span>
+            Pausar
         </span>
 
         <span>
-            <span class="key">R</span> Reiniciar
+            <span class="key">R</span>
+            Reiniciar
         </span>
+
     </div>
 
 </div>
 
+
 <script>
 
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+const canvas =
+    document.getElementById("gameCanvas");
 
-const overlay = document.getElementById("overlay");
-const overlayTitle = document.getElementById("overlayTitle");
-const overlayText = document.getElementById("overlayText");
-const startButton = document.getElementById("startButton");
+const ctx =
+    canvas.getContext("2d");
+
+const overlay =
+    document.getElementById("overlay");
+
+const overlayTitle =
+    document.getElementById("overlayTitle");
+
+const overlayText =
+    document.getElementById("overlayText");
+
+const startButton =
+    document.getElementById("startButton");
+
 
 let width;
 let height;
-
-function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-
-    const scale = window.devicePixelRatio || 1;
-
-    canvas.width = rect.width * scale;
-    canvas.height = rect.height * scale;
-
-    ctx.setTransform(scale, 0, 0, scale, 0, 0);
-
-    width = rect.width;
-    height = rect.height;
-}
-
-window.addEventListener("resize", resizeCanvas);
-
-resizeCanvas();
-
-
-// ============================
-// CONFIGURAÇÕES
-// ============================
-
-const WIN_SCORE = 7;
-
-const paddle = {
-    width: 14,
-    height: 100,
-    speed: 7
-};
-
-const ball = {
-    size: 14,
-    speed: 6,
-    x: 0,
-    y: 0,
-    vx: 0,
-    vy: 0
-};
-
-let player1 = {
-    x: 30,
-    y: 0,
-    score: 0
-};
-
-let player2 = {
-    x: 0,
-    y: 0,
-    score: 0
-};
 
 let keys = {};
 
 let gameRunning = false;
 let gamePaused = false;
 
+const WIN_SCORE = 7;
 
-// ============================
-// POSIÇÕES
-// ============================
+
+/* =========================
+   CANVAS RESPONSIVO
+========================= */
+
+function resizeCanvas() {
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    const dpr =
+        Math.min(window.devicePixelRatio || 1, 2);
+
+    canvas.width =
+        rect.width * dpr;
+
+    canvas.height =
+        rect.height * dpr;
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+    width = rect.width;
+    height = rect.height;
+
+    paddle.height =
+        Math.max(55, height * 0.22);
+
+    paddle.width =
+        Math.max(9, width * 0.014);
+
+    player1.x =
+        width * 0.035;
+
+    player2.x =
+        width -
+        width * 0.035 -
+        paddle.width;
+
+}
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+/* =========================
+   OBJETOS
+========================= */
+
+const paddle = {
+
+    width: 12,
+
+    height: 90,
+
+    speed: 7
+
+};
+
+
+const ball = {
+
+    size: 14,
+
+    speed: 6,
+
+    x: 0,
+
+    y: 0,
+
+    vx: 0,
+
+    vy: 0
+
+};
+
+
+const player1 = {
+
+    x: 30,
+
+    y: 0,
+
+    score: 0
+
+};
+
+
+const player2 = {
+
+    x: 0,
+
+    y: 0,
+
+    score: 0
+
+};
+
+
+/* =========================
+   RESET POSIÇÕES
+========================= */
 
 function resetPositions() {
 
-    player1.x = 30;
-    player1.y = height / 2 - paddle.height / 2;
+    player1.x =
+        width * 0.035;
 
-    player2.x = width - 30 - paddle.width;
-    player2.y = height / 2 - paddle.height / 2;
+    player2.x =
+        width -
+        width * 0.035 -
+        paddle.width;
+
+    player1.y =
+        height / 2 -
+        paddle.height / 2;
+
+    player2.y =
+        height / 2 -
+        paddle.height / 2;
 
     resetBall();
+
 }
 
 
-// ============================
-// BOLA
-// ============================
+/* =========================
+   BOLA
+========================= */
 
-function resetBall(direction = Math.random() > .5 ? 1 : -1) {
+function resetBall(direction) {
 
-    ball.x = width / 2 - ball.size / 2;
-    ball.y = height / 2 - ball.size / 2;
+    if (!direction) {
 
-    const angle = (Math.random() * 0.8 - 0.4);
+        direction =
+            Math.random() > .5
+            ? 1
+            : -1;
 
-    ball.speed = 6;
-
-    ball.vx = direction * ball.speed;
-    ball.vy = angle * ball.speed;
-}
-
-
-// ============================
-// TECLADO
-// ============================
-
-document.addEventListener("keydown", (event) => {
-
-    keys[event.key.toLowerCase()] = true;
-
-    if (
-        event.key === "ArrowUp" ||
-        event.key === "ArrowDown" ||
-        event.code === "Space"
-    ) {
-        event.preventDefault();
     }
 
-    if (event.code === "Space") {
+    ball.x =
+        width / 2 -
+        ball.size / 2;
 
-        if (gameRunning) {
-            gamePaused = !gamePaused;
+    ball.y =
+        height / 2 -
+        ball.size / 2;
+
+    ball.speed =
+        Math.max(
+            4.5,
+            Math.min(width * .012, 8)
+        );
+
+    const angle =
+        Math.random() * .8 - .4;
+
+    ball.vx =
+        direction *
+        ball.speed;
+
+    ball.vy =
+        angle *
+        ball.speed;
+
+}
+
+
+/* =========================
+   TECLADO
+========================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        keys[event.key.toLowerCase()] =
+            true;
+
+        if (event.code === "Space") {
+
+            event.preventDefault();
+
+            if (gameRunning) {
+
+                gamePaused =
+                    !gamePaused;
+
+            }
+
         }
+
+        if (
+            event.key.toLowerCase()
+            === "r"
+        ) {
+
+            restartGame();
+
+        }
+
     }
+);
 
-    if (event.key.toLowerCase() === "r") {
-        restartGame();
+
+document.addEventListener(
+    "keyup",
+    event => {
+
+        keys[event.key.toLowerCase()] =
+            false;
+
     }
-});
-
-document.addEventListener("keyup", (event) => {
-    keys[event.key.toLowerCase()] = false;
-});
+);
 
 
-// ============================
-// MOVIMENTO DOS JOGADORES
-// ============================
+/* =========================
+   CONTROLES TOUCH
+========================= */
+
+function setupTouchButton(
+    id,
+    key
+) {
+
+    const button =
+        document.getElementById(id);
+
+    button.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            keys[key] = true;
+
+        }
+    );
+
+    button.addEventListener(
+        "pointerup",
+        event => {
+
+            event.preventDefault();
+
+            keys[key] = false;
+
+        }
+    );
+
+    button.addEventListener(
+        "pointerleave",
+        () => {
+
+            keys[key] = false;
+
+        }
+    );
+
+    button.addEventListener(
+        "pointercancel",
+        () => {
+
+            keys[key] = false;
+
+        }
+    );
+
+}
+
+
+setupTouchButton(
+    "p1Up",
+    "w"
+);
+
+setupTouchButton(
+    "p1Down",
+    "s"
+);
+
+setupTouchButton(
+    "p2Up",
+    "arrowup"
+);
+
+setupTouchButton(
+    "p2Down",
+    "arrowdown"
+);
+
+
+/* =========================
+   RAQUETES
+========================= */
 
 function updatePaddles() {
 
-    // Jogador 1
-
     if (keys["w"]) {
-        player1.y -= paddle.speed;
+
+        player1.y -=
+            paddle.speed;
+
     }
 
     if (keys["s"]) {
-        player1.y += paddle.speed;
+
+        player1.y +=
+            paddle.speed;
+
     }
 
-
-    // Jogador 2
-
     if (keys["arrowup"]) {
-        player2.y -= paddle.speed;
+
+        player2.y -=
+            paddle.speed;
+
     }
 
     if (keys["arrowdown"]) {
-        player2.y += paddle.speed;
+
+        player2.y +=
+            paddle.speed;
+
     }
 
+    player1.y =
+        Math.max(
+            0,
+            Math.min(
+                height - paddle.height,
+                player1.y
+            )
+        );
 
-    // Limites
+    player2.y =
+        Math.max(
+            0,
+            Math.min(
+                height - paddle.height,
+                player2.y
+            )
+        );
 
-    player1.y = Math.max(
-        0,
-        Math.min(height - paddle.height, player1.y)
-    );
-
-    player2.y = Math.max(
-        0,
-        Math.min(height - paddle.height, player2.y)
-    );
 }
 
 
-// ============================
-// IA OPCIONAL
-// ============================
+/* =========================
+   COLISÃO
+========================= */
 
-// Atualmente o segundo jogador é controlado
-// pelas setas.
-
-// Para transformar o Player 2 em computador,
-// descomente a função abaixo e chame-a em update().
-
-/*
-function updateAI() {
-
-    const center = player2.y + paddle.height / 2;
-
-    if (center < ball.y) {
-        player2.y += 4;
-    }
-
-    if (center > ball.y) {
-        player2.y -= 4;
-    }
-
-    player2.y = Math.max(
-        0,
-        Math.min(height - paddle.height, player2.y)
-    );
-}
-*/
-
-
-// ============================
-// COLISÃO
-// ============================
-
-function collision(ball, paddle) {
+function collision(
+    ball,
+    paddle
+) {
 
     return (
-        ball.x < paddle.x + paddle.width &&
-        ball.x + ball.size > paddle.x &&
-        ball.y < paddle.y + paddle.height &&
-        ball.y + ball.size > paddle.y
+
+        ball.x <
+        paddle.x +
+        paddle.width
+
+        &&
+
+        ball.x +
+        ball.size >
+        paddle.x
+
+        &&
+
+        ball.y <
+        paddle.y +
+        paddle.height
+
+        &&
+
+        ball.y +
+        ball.size >
+        paddle.y
+
     );
+
 }
 
 
-// ============================
-// MOVIMENTO DA BOLA
-// ============================
+/* =========================
+   BOLA
+========================= */
 
 function updateBall() {
 
     ball.x += ball.vx;
+
     ball.y += ball.vy;
 
 
-    // Parede superior
+    /* PAREDE SUPERIOR */
 
     if (ball.y <= 0) {
 
         ball.y = 0;
+
         ball.vy *= -1;
+
     }
 
 
-    // Parede inferior
+    /* PAREDE INFERIOR */
 
-    if (ball.y + ball.size >= height) {
+    if (
+        ball.y +
+        ball.size >=
+        height
+    ) {
 
-        ball.y = height - ball.size;
+        ball.y =
+            height -
+            ball.size;
+
         ball.vy *= -1;
+
     }
 
 
-    // Raquete jogador 1
+    /* PLAYER 1 */
 
-    if (collision(ball, player1) && ball.vx < 0) {
+    if (
+        collision(ball, player1)
+        &&
+        ball.vx < 0
+    ) {
 
-        ball.x = player1.x + paddle.width;
+        ball.x =
+            player1.x +
+            paddle.width;
 
-        const hitPosition =
-            (ball.y + ball.size / 2) -
-            (player1.y + paddle.height / 2);
+        const hit =
+            (
+                ball.y +
+                ball.size / 2
+            )
+            -
+            (
+                player1.y +
+                paddle.height / 2
+            );
 
         const normalized =
-            hitPosition / (paddle.height / 2);
+            hit /
+            (paddle.height / 2);
 
-        ball.vx = Math.abs(ball.vx) + 0.3;
-        ball.vy = normalized * 6;
+        ball.vx =
+            Math.abs(ball.vx) +
+            .2;
+
+        ball.vy =
+            normalized * 6;
+
     }
 
 
-    // Raquete jogador 2
+    /* PLAYER 2 */
 
-    if (collision(ball, player2) && ball.vx > 0) {
+    if (
+        collision(ball, player2)
+        &&
+        ball.vx > 0
+    ) {
 
-        ball.x = player2.x - ball.size;
+        ball.x =
+            player2.x -
+            ball.size;
 
-        const hitPosition =
-            (ball.y + ball.size / 2) -
-            (player2.y + paddle.height / 2);
+        const hit =
+            (
+                ball.y +
+                ball.size / 2
+            )
+            -
+            (
+                player2.y +
+                paddle.height / 2
+            );
 
         const normalized =
-            hitPosition / (paddle.height / 2);
+            hit /
+            (paddle.height / 2);
 
-        ball.vx = -Math.abs(ball.vx) - 0.3;
-        ball.vy = normalized * 6;
+        ball.vx =
+            -Math.abs(ball.vx) -
+            .2;
+
+        ball.vy =
+            normalized * 6;
+
     }
 
 
-    // Ponto jogador 2
+    /* PONTO PLAYER 2 */
 
-    if (ball.x < -ball.size) {
+    if (
+        ball.x <
+        -ball.size
+    ) {
 
         player2.score++;
 
         checkWinner();
 
         if (gameRunning) {
+
             resetBall(-1);
+
         }
+
     }
 
 
-    // Ponto jogador 1
+    /* PONTO PLAYER 1 */
 
-    if (ball.x > width) {
+    if (
+        ball.x >
+        width
+    ) {
 
         player1.score++;
 
         checkWinner();
 
         if (gameRunning) {
+
             resetBall(1);
+
         }
+
     }
+
 }
 
 
-// ============================
-// VENCEDOR
-// ============================
+/* =========================
+   VENCEDOR
+========================= */
 
 function checkWinner() {
 
-    if (player1.score >= WIN_SCORE) {
+    if (
+        player1.score >=
+        WIN_SCORE
+    ) {
 
-        endGame("PLAYER 1 VENCEU!");
+        endGame(
+            "PLAYER 1 VENCEU!"
+        );
+
     }
 
-    if (player2.score >= WIN_SCORE) {
+    if (
+        player2.score >=
+        WIN_SCORE
+    ) {
 
-        endGame("PLAYER 2 VENCEU!");
+        endGame(
+            "PLAYER 2 VENCEU!"
+        );
+
     }
+
 }
 
 
@@ -528,67 +1039,111 @@ function endGame(message) {
 
     gameRunning = false;
 
-    overlayTitle.textContent = message;
+    overlayTitle.textContent =
+        message;
+
     overlayText.textContent =
         `Placar final: ${player1.score} × ${player2.score}`;
 
-    startButton.textContent = "JOGAR NOVAMENTE";
+    startButton.textContent =
+        "JOGAR NOVAMENTE";
 
-    overlay.classList.remove("hidden");
+    overlay.classList.remove(
+        "hidden"
+    );
+
 }
 
 
-// ============================
-// DESENHO
-// ============================
+/* =========================
+   DESENHO
+========================= */
 
 function drawBackground() {
 
-    ctx.fillStyle = "#080c13";
+    ctx.fillStyle =
+        "#080c13";
 
-    ctx.fillRect(0, 0, width, height);
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
 
 
-    // Linha central
+    /* LINHA CENTRAL */
 
-    ctx.setLineDash([10, 15]);
+    ctx.setLineDash([
+        8,
+        12
+    ]);
 
-    ctx.strokeStyle = "#283241";
+    ctx.strokeStyle =
+        "#283241";
+
     ctx.lineWidth = 2;
 
     ctx.beginPath();
 
-    ctx.moveTo(width / 2, 0);
-    ctx.lineTo(width / 2, height);
+    ctx.moveTo(
+        width / 2,
+        0
+    );
+
+    ctx.lineTo(
+        width / 2,
+        height
+    );
 
     ctx.stroke();
 
     ctx.setLineDash([]);
 
 
-    // Placar
+    /* PLACAR */
 
-    ctx.font = "bold 70px Arial";
-    ctx.textAlign = "center";
-    ctx.fillStyle = "#202938";
+    const scoreSize =
+        Math.max(
+            40,
+            width * .07
+        );
+
+    ctx.font =
+        `bold ${scoreSize}px Arial`;
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillStyle =
+        "#202938";
 
     ctx.fillText(
         player1.score,
-        width / 2 - 70,
-        85
+        width / 2 - 60,
+        scoreSize + 10
     );
 
     ctx.fillText(
         player2.score,
-        width / 2 + 70,
-        85
+        width / 2 + 60,
+        scoreSize + 10
     );
+
 }
 
 
-function drawPaddle(x, y) {
+/* =========================
+   RAQUETE
+========================= */
 
-    ctx.fillStyle = "#ffffff";
+function drawPaddle(
+    x,
+    y
+) {
+
+    ctx.fillStyle =
+        "#ffffff";
 
     ctx.beginPath();
 
@@ -597,30 +1152,46 @@ function drawPaddle(x, y) {
         y,
         paddle.width,
         paddle.height,
-        7
+        6
     );
 
     ctx.fill();
+
 }
 
 
+/* =========================
+   BOLA
+========================= */
+
 function drawBall() {
 
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle =
+        "#ffffff";
 
     ctx.beginPath();
 
     ctx.arc(
-        ball.x + ball.size / 2,
-        ball.y + ball.size / 2,
+        ball.x +
         ball.size / 2,
+
+        ball.y +
+        ball.size / 2,
+
+        ball.size / 2,
+
         0,
         Math.PI * 2
     );
 
     ctx.fill();
+
 }
 
+
+/* =========================
+   DRAW
+========================= */
 
 function draw() {
 
@@ -637,16 +1208,20 @@ function draw() {
     );
 
     drawBall();
+
 }
 
 
-// ============================
-// GAME LOOP
-// ============================
+/* =========================
+   GAME LOOP
+========================= */
 
 function update() {
 
-    if (gameRunning && !gamePaused) {
+    if (
+        gameRunning &&
+        !gamePaused
+    ) {
 
         updatePaddles();
 
@@ -656,20 +1231,27 @@ function update() {
 
     draw();
 
-    requestAnimationFrame(update);
+    requestAnimationFrame(
+        update
+    );
+
 }
 
 
-// ============================
-// INICIAR
-// ============================
+/* =========================
+   START
+========================= */
 
 function startGame() {
 
-    if (player1.score >= WIN_SCORE ||
-        player2.score >= WIN_SCORE) {
+    if (
+        player1.score >= WIN_SCORE
+        ||
+        player2.score >= WIN_SCORE
+    ) {
 
         player1.score = 0;
+
         player2.score = 0;
 
     }
@@ -677,36 +1259,63 @@ function startGame() {
     resetPositions();
 
     gameRunning = true;
+
     gamePaused = false;
 
-    overlay.classList.add("hidden");
+    overlay.classList.add(
+        "hidden"
+    );
+
 }
 
+
+/* =========================
+   RESTART
+========================= */
 
 function restartGame() {
 
     player1.score = 0;
+
     player2.score = 0;
 
     resetPositions();
 
     gameRunning = false;
+
     gamePaused = false;
 
-    overlayTitle.textContent = "PONG";
+    overlayTitle.textContent =
+        "PONG";
+
     overlayText.textContent =
         "Primeiro jogador a chegar a 7 pontos vence.";
 
-    startButton.textContent = "COMEÇAR";
+    startButton.textContent =
+        "COMEÇAR";
 
-    overlay.classList.remove("hidden");
+    overlay.classList.remove(
+        "hidden"
+    );
+
 }
 
 
-startButton.addEventListener("click", startGame);
+/* =========================
+   BOTÃO START
+========================= */
+
+startButton.addEventListener(
+    "click",
+    startGame
+);
 
 
-// Inicialização
+/* =========================
+   INICIAR
+========================= */
+
+resizeCanvas();
 
 resetPositions();
 
